@@ -3,12 +3,12 @@ Units are the basic fighting unit in the game. They have several attributes such
 location on grid, health, etc.
 """
 
-__author__ = 'isung'
+__author__ = 'Isaac'
 
 import math
 
 class Unit:
-    def __init__(self, type, x, y, color, group):
+    def __init__(self, type, x, y, color, group, owner):
         self.type = type
         self.x = x
         self.y = y
@@ -18,31 +18,43 @@ class Unit:
         self.att = 1
         self.group = group
         self.range = 1
+        self.owner = owner
+        self.char = " "
+        self.moveRange = 5
+        self.moveQueue = []
 
         # set attack value based on type
-        self.set_attack_and_range()
+        self.initialize()
 
     # Initializes attack and range values based on what type you are
-    def set_attack_and_range(self):
+    def initialize(self):
         if self.type == "infantry":
             self.att = 2
+            self.char = "I"
         elif self.type == "cavalry":
             self.att = 2
+            self.char = "C"
+            self.moveRange += 2
         elif self.type == "archer":
             self.att = 2
             self.range = 2
+            self.char = "A"
         elif self.type == "pikeman":
             self.att = 1
+            self.char = "P"
         elif self.type == "hoplite":
             self.att = 1
             self.range = 2
+            self.char = "H"
 
     # Full battle sequence, I attack first, other attacks back
     def battle(self, other, myTerrain, theirTerrain):
-        alive = self.deal_damage(other, theirTerrain)
+        # check to see if other unit is attack-able
+        if other.owner != self.owner:
+            alive = self.deal_damage(other, theirTerrain)
 
-        if alive:
-            other.deal_damage(self, myTerrain)
+            if alive:
+                other.deal_damage(self, myTerrain)
 
     # Do one round of attacks, I hit the other guy and if he dies,
     # I return False, if he survives, I return True
@@ -85,3 +97,8 @@ class Unit:
             return False
         else:
             return True
+
+    # Debugging purposes
+    def display(self):
+        print(self.type + ":")
+        print("HP: " + str(self.hp))

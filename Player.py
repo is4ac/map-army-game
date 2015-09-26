@@ -3,7 +3,7 @@ Player object holds the information about the player, such as number of units co
 territories owned, turn status, etc.
 """
 
-__author__ = 'isung'
+__author__ = 'Isaac'
 
 class Player:
     def __init__(self, name):
