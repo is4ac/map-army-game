@@ -98,6 +98,19 @@ class Unit:
         else:
             return True
 
+    # add to move queue if within range
+    def addMove(self, dire):
+        if len(self.moveQueue) < self.range:
+            self.moveQueue.append(dire)
+        else:
+            self.moveQueue.append(None)  # indicates movement beyond range
+
+    # cloning function
+    def clone(self):
+        newUnit = Unit(self.type, self.x, self.y, self.color, self.group, self.owner)
+        newUnit.hp = self.hp
+        return newUnit
+
     # Debugging purposes
     def display(self):
         print(self.type + ":")
