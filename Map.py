@@ -10,8 +10,9 @@ class Map:
         self.unitList = unitList
         self.terrainList = terrainList
         self.moveQueue = []
-        self.ghostList = self.clone()
+        self.ghostList = []
         self.group = -1
+        self.currentPlayer = -1
 
     # get all possible group options for current player
     def getGroups(self, currentPlayer):
@@ -31,8 +32,6 @@ class Map:
         for lists in self.unitList:
             for unit in lists:
                 unit.moveQueue = []
-
-        self.ghostList = self.clone()  # reset ghost units
 
     # for debugging/phase 1/text version only
     def display(self):
@@ -72,34 +71,49 @@ class Map:
 
         return newList
 
-    def addToMoveQueue(self, dire, group):
+    def initializeMove(self, player, group):
         self.group = group
+        self.currentPlayer = player
+        self.ghostList = self.clone()
 
+        for i in range(0, len(self.ghostList)):
+            for j in range(0, len(self.ghostList[i])):
+                if self.ghostList[i][j] is not None:
+                    if self.ghostList[i][j].group != group and self.ghostList[i][j].owner == player:
+                        self.ghostList[i][j] = None
+
+    def addToMoveQueue(self, dire):
         # add direction to all units in the group
         for lists in self.unitList:
             for unit in lists:
                 if unit is not None:
-                    if unit.group == group:
+                    if unit.group == self.group:
                         unit.addMove(dire)
 
     # move units one step in one direction
-    def move(self, units, dire, group):
+    def move(self, units, dire):
         # use a "ghost" to track units that are on top of their own team
         # move ghost units first, then update the actual map
         if dire == "up" or "w":
-            for j in range(0, len(units[0])):
-                for i in range(0, len(units)):
-
+            # loop through all units
+            for i in range(1, len(units)):
+                for j in range(0, len(units[i])):
+                    if self.ghostList[i][j].group == self.group:
+                        # move up if possible
+                        if self.ghostList[i-1][j] is None:
+                            self.ghostList[i-1][j] = self.ghostList[i][j]
+                            self.ghostList[i][j] = None
         elif dire == "down" or "s":
         elif dire == "left" or "a":
         elif dire == "right" or "d":
 
         # update real map from ghost map
 
+
     # finalize move choices
     def submitMove(self):
         for move in self.moveQueue:
-            self.move(self.unitList, move, self.group)
+            self.move(self.unitList, move)
 
         self.resetMoveQueue()
 

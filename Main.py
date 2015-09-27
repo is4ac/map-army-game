@@ -44,7 +44,9 @@ def menuDisplay(players, current):
 # and move the units in the selected group. Returns true if successful,
 # false if user undos their choice of the group and wants to return to
 # the previous menu
-def getMoveQueue(map, group):
+def getMoveQueue(map, player, group):
+    map.initializeMove(player, group)
+
     while True:
         map.displayQueue()  # display temp map
         dire = input("Choose a direction - up, left, right, down"
@@ -61,13 +63,13 @@ def getMoveQueue(map, group):
             map.submitMove()
             return False  # was successful
         elif dire == "up" or "w":
-            map.addToMoveQueue("up", group)
+            map.addToMoveQueue("up", player, group)
         elif dire == "down" or "s":
-            map.addToMoveQueue("down", group)
+            map.addToMoveQueue("down", player, group)
         elif dire == "left" or "a":
-            map.addToMoveQueue("left", group)
+            map.addToMoveQueue("left", player, group)
         elif dire == "right" or "d":
-            map.addToMoveQueue("right", group)
+            map.addToMoveQueue("right", player, group)
 
 # move units on the map
 def move(map, currentPlayer):
@@ -84,7 +86,7 @@ def move(map, currentPlayer):
         # TODO: allow people to undo their choice and choose a different group
         for x in groups:
             if choice == str(x):
-                loop = getMoveQueue(map, x)
+                loop = getMoveQueue(map, currentPlayer, x)
 
 
 
