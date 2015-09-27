@@ -8,7 +8,11 @@ __author__ = 'Isaac'
 import math
 
 class Unit:
+    idCounter = 0
+
     def __init__(self, type, x, y, color, group, owner):
+        self.id = self.idCounter
+        self.idCounter += 1
         self.type = type
         self.x = x
         self.y = y

@@ -90,6 +90,12 @@ class Map:
                     if unit.group == self.group:
                         unit.addMove(dire)
 
+    def remove(self, units, id):
+        for i in range(0, len(units)):
+            for j in range(0, len(units[i])):
+                if units[i][j].id == id:
+                    units[i][j] = None
+
     # move units one step in one direction
     def move(self, units, dire):
         # use a "ghost" to track units that are on top of their own team
@@ -103,11 +109,42 @@ class Map:
                         if self.ghostList[i-1][j] is None:
                             self.ghostList[i-1][j] = self.ghostList[i][j]
                             self.ghostList[i][j] = None
-        elif dire == "down" or "s":
-        elif dire == "left" or "a":
-        elif dire == "right" or "d":
+        elif dire == "down" or "s": # TODO
+            # loop through all units
+            for i in range(1, len(units)):
+                for j in range(0, len(units[i])):
+                    if self.ghostList[i][j].group == self.group:
+                        # move up if possible
+                        if self.ghostList[i-1][j] is None:
+                            self.ghostList[i-1][j] = self.ghostList[i][j]
+                            self.ghostList[i][j] = None
+        elif dire == "left" or "a": # TODO
+            # loop through all units
+            for i in range(1, len(units)):
+                for j in range(0, len(units[i])):
+                    if self.ghostList[i][j].group == self.group:
+                        # move up if possible
+                        if self.ghostList[i-1][j] is None:
+                            self.ghostList[i-1][j] = self.ghostList[i][j]
+                            self.ghostList[i][j] = None
+        elif dire == "right" or "d": # TODO
+            # loop through all units
+            for i in range(1, len(units)):
+                for j in range(0, len(units[i])):
+                    if self.ghostList[i][j].group == self.group:
+                        # move up if possible
+                        if self.ghostList[i-1][j] is None:
+                            self.ghostList[i-1][j] = self.ghostList[i][j]
+                            self.ghostList[i][j] = None
 
         # update real map from ghost map
+        for i in range(0, len(units)):
+            for j in range(0, len(units[i])):
+                if self.ghostList[i][j].group == self.group:
+                    if units[i][j] is None:
+                        # remove original from map
+                        self.remove(units, self.ghostList[i][j].id)
+                        units[i][j] = self.ghostList[i][j]
 
 
     # finalize move choices
