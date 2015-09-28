@@ -116,7 +116,7 @@ class Map:
                         units[i][j] = None
 
     # move units one step in one direction
-    def move(self, units, dire):
+    def move(self, units, dire, num):
         print(dire)
         # use a "ghost" to track units that are on top of their own team
         # move ghost units first, then update the actual map
@@ -126,43 +126,43 @@ class Map:
                 for j in range(0, len(units[i])):
                     if self.ghostList[i][j] is not None:
                         if (self.ghostList[i][j].group == self.group and
-                                self.ghostList[i][j].moveQueue[-1] is not None):
+                                self.ghostList[i][j].moveQueue[num] is not None):
                             # move up if possible
                             if self.ghostList[i-1][j] is None:
                                 self.ghostList[i-1][j] = self.ghostList[i][j]
                                 self.ghostList[i][j] = None
         elif dire == "down" or dire == "s":
             # loop through all units
-            for i in range(len(units)-1, -1, -1):
+            for i in range(len(units)-2, -1, -1):
                 for j in range(0, len(units[i])):
                     if self.ghostList[i][j] is not None:
                         if (self.ghostList[i][j].group == self.group and
-                                self.ghostList[i][j].moveQueue[-1] is not None):
+                                self.ghostList[i][j].moveQueue[num] is not None):
                             # move down if possible
                             if self.ghostList[i+1][j] is None:
                                 self.ghostList[i+1][j] = self.ghostList[i][j]
                                 self.ghostList[i][j] = None
-        elif dire == "left" or dire == "a": # TODO
+        elif dire == "left" or dire == "a":
             # loop through all units
-            for i in range(1, len(units)):
-                for j in range(0, len(units[i])):
+            for j in range(1, len(units[0])):
+                for i in range(0, len(units)):
                     if self.ghostList[i][j] is not None:
                         if (self.ghostList[i][j].group == self.group and
-                                self.ghostList[i][j].moveQueue[-1] is not None):
+                                self.ghostList[i][j].moveQueue[num] is not None):
                             # move left if possible
-                            if self.ghostList[i-1][j] is None:
-                                self.ghostList[i-1][j] = self.ghostList[i][j]
+                            if self.ghostList[i][j-1] is None:
+                                self.ghostList[i][j-1] = self.ghostList[i][j]
                                 self.ghostList[i][j] = None
-        elif dire == "right" or dire == "d": # TODO
+        elif dire == "right" or dire == "d":
             # loop through all units
-            for i in range(1, len(units)):
-                for j in range(0, len(units[i])):
+            for j in range(len(units[0])-2, -1, -1):
+                for i in range(0, len(units)):
                     if self.ghostList[i][j] is not None:
                         if (self.ghostList[i][j].group == self.group and
-                                self.ghostList[i][j].moveQueue[-1] is not None):
+                                self.ghostList[i][j].moveQueue[num] is not None):
                             # move right if possible
-                            if self.ghostList[i-1][j] is None:
-                                self.ghostList[i-1][j] = self.ghostList[i][j]
+                            if self.ghostList[i][j+1] is None:
+                                self.ghostList[i][j+1] = self.ghostList[i][j]
                                 self.ghostList[i][j] = None
 
         # update real map from ghost map
@@ -185,8 +185,8 @@ class Map:
         self.tempUnitList = self.clone()
         self.ghostList = self.clone()
 
-        for direction in self.moveQueue:
-            self.move(self.tempUnitList, direction)
+        for x in range(0, len(self.moveQueue)):
+            self.move(self.tempUnitList, self.moveQueue[x], x)
 
         print(self.moveQueue)
         self.displayHelper(self.tempUnitList)
