@@ -62,14 +62,14 @@ def getMoveQueue(map, player, group):
         elif dire == "":
             map.submitMove()
             return False  # was successful
-        elif dire == "up" or "w":
-            map.addToMoveQueue("up", player, group)
-        elif dire == "down" or "s":
-            map.addToMoveQueue("down", player, group)
-        elif dire == "left" or "a":
-            map.addToMoveQueue("left", player, group)
-        elif dire == "right" or "d":
-            map.addToMoveQueue("right", player, group)
+        elif dire == "up" or dire == "w":
+            map.addToMoveQueue("up")
+        elif dire == "down" or dire == "s":
+            map.addToMoveQueue("down")
+        elif dire == "left" or dire == "a":
+            map.addToMoveQueue("left")
+        elif dire == "right" or dire == "d":
+            map.addToMoveQueue("right")
 
 # move units on the map
 def move(map, currentPlayer):
@@ -83,7 +83,6 @@ def move(map, currentPlayer):
     while loop:
         # TODO: input validation
         choice = input("Choose a group: ")
-        # TODO: allow people to undo their choice and choose a different group
         for x in groups:
             if choice == str(x):
                 loop = getMoveQueue(map, currentPlayer, x)
@@ -101,7 +100,7 @@ def main():
     numOfPlayers = len(players)
     currentPlayer = player1.id
 
-    inf1 = Unit("infantry", 0, 0, "green", 0, 0)
+    inf1 = Unit("infantry", 0, 5, "green", 0, 0)
     cav1 = Unit("cavalry", 0, 1, "blue", 1, 1)
 
     # Test code for Map

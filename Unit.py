@@ -11,8 +11,8 @@ class Unit:
     idCounter = 0
 
     def __init__(self, type, x, y, color, group, owner):
-        self.id = self.idCounter
-        self.idCounter += 1
+        self.id = Unit.idCounter
+        Unit.idCounter += 1
         self.type = type
         self.x = x
         self.y = y
@@ -102,9 +102,15 @@ class Unit:
         else:
             return True
 
+    def resetMoveQueue(self):
+        self.moveQueue = []
+
+    def deleteLastMove(self):
+        self.moveQueue = self.moveQueue[:-1]
+
     # add to move queue if within range
     def addMove(self, dire):
-        if len(self.moveQueue) < self.range:
+        if len(self.moveQueue) < self.moveRange:
             self.moveQueue.append(dire)
         else:
             self.moveQueue.append(None)  # indicates movement beyond range
