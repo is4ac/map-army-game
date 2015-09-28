@@ -14,6 +14,8 @@ class Map:
         self.tempUnitList = []
         self.group = -1
         self.currentPlayer = -1
+        self.closeDir = ""
+        self.rangeDir = ""
 
     # get all possible group options for current player
     def getGroups(self, currentPlayer):
@@ -190,3 +192,19 @@ class Map:
 
         print(self.moveQueue)
         self.displayHelper(self.tempUnitList)
+
+    # initializes the attack phase
+    def initializeAttack(self, currentPlayer, group):
+        self.currentPlayer = currentPlayer
+        self.group = group
+
+    # sets close ranged units attack direction
+    def closeAttackDirection(self, closeDir):
+        self.closeDir = closeDir
+
+    # sets ranged units attack direction
+    def rangedAttackDirection(self, rangeDir):
+        self.rangeDir = rangeDir
+
+    def attack(self):
+        #TODO

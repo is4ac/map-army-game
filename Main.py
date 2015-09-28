@@ -71,14 +71,19 @@ def getMoveQueue(map, player, group):
         elif dire == "right" or dire == "d":
             map.addToMoveQueue("right")
 
-# move units on the map
-def move(map, currentPlayer):
+def displayGroups(map, currentPlayer):
     groups = map.getGroups(currentPlayer)
     print("Available groups: ")
     for x in groups:
         print(x)
 
-    # Choosing group outer loop
+    return groups
+
+# move units on the map
+def move(map, currentPlayer):
+    groups = displayGroups(map, currentPlayer)
+
+    # Choose a group outer loop
     loop = True
     while loop:
         # TODO: input validation
@@ -87,12 +92,47 @@ def move(map, currentPlayer):
             if choice == str(x):
                 loop = getMoveQueue(map, currentPlayer, x)
 
+# choose an attack direction for the player
+def getAttackDirection(map, currentPlayer, group):
+    map.initializeAttack(currentPlayer, group)
 
+    closeDir = input("Choose a direction for your close ranged units"
+                     "(return - go back to main menu): ")
+    if closeDir == "return":
+        return True
 
+    rangeDir = input("Choose a direction for your long ranged units"
+                     "(return - go back to main menu): ")
+    if rangeDir == "return":
+        return True
+
+    map.closeAttackDirection(closeDir)
+    map.rangedAttackDirection(rangeDir)
+
+    map.attack()
+    return False
+
+# attack units on the map
+def attack(map, currentPlayer):
+    groups = displayGroups(map, currentPlayer)
+
+    # Choose a group outer loop
+    loop = True
+    while loop:
+        # TODO: input validation
+        choice = input("Choose a group: ")
+        for x in groups:
+            if choice == str(x):
+                loop = getAttackDirection(map, currentPlayer, x)
+
+# calls the corresponding action for the player
 def takeAction(choice, map, players, currentPlayer):
     if choice == "move":
         move(map, currentPlayer)
+    elif choice == "attack":
+        attack(map, currentPlayer)
 
+# main driver
 def main():
     player1 = Player("Player 1")
     player2 = Player("Player 2")
