@@ -117,6 +117,13 @@ class Map:
                     if units[i][j].id == id:
                         units[i][j] = None
 
+    # remove all dead units from the map
+    def removeDeadUnits(self):
+        for i in range(0, len(self.unitList)):
+            for j in range(0, len(self.unitList[i])):
+                if self.unitList[i][j] is not None and self.unitList[i][j].hp <= 0:
+                    self.unitList[i][j] = None
+
     # move units one step in one direction
     def move(self, units, dire, num):
         print(dire)
@@ -206,5 +213,46 @@ class Map:
     def rangedAttackDirection(self, rangeDir):
         self.rangeDir = rangeDir
 
+    # conducts the attack
     def attack(self):
-        #TODO
+        # attempt to battle all units for short range units
+        for i in range(0, len(self.unitList)):
+            for j in range(0, len(self.unitList[i])):
+                if self.unitList[i][j] is not None:
+                    if self.closeDir == "up":
+                        if i-1 < 0:
+                            continue
+                        else:
+                            if self.unitList[i-1][j] is not None:
+                                self.unitList[i][j].battle(self.unitList[i-1][j],
+                                                           self.terrainList[i][j],
+                                                           self.terrainList[i-1][j])
+
+                    elif self.closeDir == "down":
+                        if i+1 >= len(self.unitList):
+                            continue
+                        else:
+                            if self.unitList[i+1][j] is not None:
+                                self.unitList[i][j].battle(self.unitList[i+1][j],
+                                                           self.terrainList[i][j],
+                                                           self.terrainList[i+1][j])
+
+                    elif self.closeDir == "left":
+                        if j-1 < 0:
+                            continue
+                        else:
+                            if self.unitList[i][j-1] is not None:
+                                self.unitList[i][j].battle(self.unitList[i][j-1],
+                                                           self.terrainList[i][j],
+                                                           self.terrainList[i][j-1])
+
+                    elif self.closeDir == "right":
+                        if j+1 >= len(self.unitList[i]):
+                            continue
+                        else:
+                            if self.unitList[i][j+1] is not None:
+                                self.unitList[i][j].battle(self.unitList[i][j+1],
+                                                           self.terrainList[i][j],
+                                                           self.terrainList[i][j+1])
+
+        self.removeDeadUnits()
