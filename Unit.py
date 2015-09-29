@@ -52,6 +52,8 @@ class Unit:
             self.char = "H"
 
     # Full battle sequence, I attack first, other attacks back
+    # returns True if battle is successful (other unit is owned by opponent)
+    # returns False otherwise
     def battle(self, other, myTerrain, theirTerrain):
         # check to see if other unit is attack-able
         if other.owner != self.owner:
@@ -59,6 +61,10 @@ class Unit:
 
             if alive:
                 other.deal_damage(self, myTerrain)
+
+            return True
+        else:
+            return False
 
     # Do one round of attacks, I hit the other guy and if he dies,
     # I return False, if he survives, I return True

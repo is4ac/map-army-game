@@ -96,12 +96,13 @@ def move(map, currentPlayer):
 def getAttackDirection(map, currentPlayer, group):
     map.initializeAttack(currentPlayer, group)
 
-    closeDir = input("Choose a direction for your close ranged units"
+    closeDir = input("Choose a direction for your close ranged units\n"
                      "(return - go back to main menu): ")
     if closeDir == "return":
         return True
 
-    rangeDir = input("Choose a direction for your long ranged units"
+    rangeDir = input("Choose a direction for your long ranged units\n"
+                     "up, up left, up right, up up, etc\n"
                      "(return - go back to main menu): ")
     if rangeDir == "return":
         return True

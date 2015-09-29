@@ -255,4 +255,14 @@ class Map:
                                                            self.terrainList[i][j],
                                                            self.terrainList[i][j+1])
 
+        # TODO: ranged units attacking
+        # Preference is given for the specific location given for ranged units,
+        # but if there is another unit in range in that general direction,
+        # then that unit gets attacked.
+        for i in range(0, len(self.unitList)):
+            for j in range(0, len(self.unitList[i])):
+                if self.unitList[i][j] is not None:
+                    if self.rangeDir == "up up":
+
+
         self.removeDeadUnits()
